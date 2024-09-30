@@ -13,7 +13,9 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, value):
-        if len(value) < 10:
+        if not value.isdigit():
+            raise ValueError('The number must consist of numbers only!')
+        elif len(value) < 10:
             raise ValueError('Number less than 10 digits!')
         elif len(value) > 10:
             raise ValueError('Number more than 10 digits!')
@@ -35,8 +37,11 @@ class Record:
     def edit_phone(self, old_phone_val, new_phone_val):
         phone_to_edit = self.find_phone(old_phone_val)
         if phone_to_edit:
-            self.remove_phone(old_phone_val)
-            self.add_phone(new_phone_val)
+            if new_phone_val.isdigit() and len(new_phone_val) == 10:
+                self.remove_phone(old_phone_val)
+                self.add_phone(new_phone_val)
+            else:
+                raise ValueError('The new number must consist of numbers only and must be 10 characters long!')
         else:
             raise ValueError('Old number not found!')
 
